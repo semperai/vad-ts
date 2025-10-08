@@ -24,5 +24,20 @@ export {
   DEFAULT_MODEL,
   MicVAD,
   getDefaultRealTimeVADOptions,
+  ort,
 } from "./real-time-vad"
 export type { RealTimeVADOptions } from "./real-time-vad"
+export type { SpeechProbabilities } from "./models/common"
+export { configureLogging, getLoggingConfig, type LogConfig } from "./logging"
+export {
+  validateAudioConstraints,
+  checkUserMediaSupport,
+  checkBrowserCompatibility,
+  VADError,
+  AudioConstraintsError,
+  ModelLoadError,
+  WorkletLoadError,
+  AudioContextError,
+  type BrowserCompatibility,
+} from "./validation"
+export { VADPerformanceTracker, PerformanceTimer, type VADPerformanceMetrics } from "./performance"

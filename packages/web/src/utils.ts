@@ -97,27 +97,18 @@ export async function audioFileToArray(audioFileData: Blob) {
   const ctx = new OfflineAudioContext(1, 1, 44100)
   const reader = new FileReader()
   let audioBuffer: AudioBuffer | null = null
-  await new Promise<void>((res) => {
-    reader.addEventListener("loadend", (_ev) => {
+  await new Promise<void>((resolve, reject) => {
+    reader.addEventListener("loadend", () => {
       const audioData = reader.result as ArrayBuffer
-      ctx.decodeAudioData(
-        audioData,
-        (buffer) => {
+      ctx
+        .decodeAudioData(audioData.slice(0))
+        .then((buffer) => {
           audioBuffer = buffer
-          ctx
-            .startRendering()
-            .then((_renderedBuffer) => {
-              console.log("Rendering completed successfully")
-              res()
-            })
-            .catch((err) => {
-              console.error(`Rendering failed: ${err}`)
-            })
-        },
-        (e) => {
-          console.log(`Error with decoding audio data: ${e}`)
-        }
-      )
+          resolve()
+        })
+        .catch((error) => {
+          reject(new Error(`Failed to decode audio data: ${error}`))
+        })
     })
     reader.readAsArrayBuffer(audioFileData)
   })
@@ -126,11 +117,13 @@ export async function audioFileToArray(audioFileData: Blob) {
   }
   let _audioBuffer = audioBuffer as AudioBuffer
   let out = new Float32Array(_audioBuffer.length)
+  const channelCount = _audioBuffer.numberOfChannels
   for (let i = 0; i < _audioBuffer.length; i++) {
-    for (let j = 0; j < _audioBuffer.numberOfChannels; j++) {
-      // @ts-ignore
-      out[i] += _audioBuffer.getChannelData(j)[i]
+    let sample = 0
+    for (let j = 0; j < channelCount; j++) {
+      sample += _audioBuffer.getChannelData(j)[i] ?? 0
     }
+    out[i] = sample / channelCount
   }
   return { audio: out, sampleRate: _audioBuffer.sampleRate }
 }
