@@ -47,18 +47,6 @@ function useOptions(
   return [reactOptions, vadOptions]
 }
 
-// Keeping this for backwards compatibility, but no longer used in the updated implementation
-// function useEventCallback<T extends (...args: any[]) => any>(fn: T): T {
-//   const ref: any = React.useRef(fn)
-//   useIsomorphicLayoutEffect(() => {
-//     ref.current = fn
-//   })
-//   return React.useCallback(
-//     (...args: any[]) => ref.current.apply(void 0, args),
-//     []
-//   ) as T
-// }
-
 /**
  * Fixed version of useMicVAD that properly handles device changes.
  *
@@ -116,9 +104,6 @@ export function useMicVAD(options: Partial<ReactRealTimeVADOptions>) {
     let myvad: MicVAD | null = null
     let canceled = false
 
-    // Reduced logging - only log when VAD is recreated
-    console.log("[useMicVAD] Initializing VAD with model:", model)
-
     const setup = async (): Promise<void> => {
       try {
         setLoading(true)
@@ -156,7 +141,6 @@ export function useMicVAD(options: Partial<ReactRealTimeVADOptions>) {
           return
         }
 
-        console.log("[useMicVAD] VAD ready")
         setVAD(myvad)
         setLoading(false)
 
@@ -165,7 +149,6 @@ export function useMicVAD(options: Partial<ReactRealTimeVADOptions>) {
           setListening(true)
         }
       } catch (e) {
-        console.error("[useMicVAD] Setup error:", e)
         setLoading(false)
         if (e instanceof Error) {
           setErrored(e.message)
@@ -175,8 +158,8 @@ export function useMicVAD(options: Partial<ReactRealTimeVADOptions>) {
       }
     }
 
-    setup().catch((e) => {
-      console.error("[useMicVAD] Unhandled setup error:", e)
+    setup().catch(() => {
+      // Error already handled in setup function
     })
 
     return function cleanUp() {
@@ -222,11 +205,3 @@ export function useMicVAD(options: Partial<ReactRealTimeVADOptions>) {
     toggle,
   }
 }
-
-// No longer needed with the updated implementation
-// const useIsomorphicLayoutEffect =
-//   typeof window !== "undefined" &&
-//   typeof window.document !== "undefined" &&
-//   typeof window.document.createElement !== "undefined"
-//     ? React.useLayoutEffect
-//     : React.useEffect
