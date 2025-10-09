@@ -20,6 +20,8 @@ test.describe('RealTimeVAD - MicVAD', () => {
           onSpeechStart: () => {},
           onSpeechEnd: () => {},
           startOnLoad: false,
+          baseAssetPath: 'http://127.0.0.1:8080/',
+          onnxWASMBasePath: 'http://127.0.0.1:8080/',
         });
 
         return {
@@ -72,6 +74,8 @@ test.describe('RealTimeVAD - MicVAD', () => {
         model: 'v5',
         onSpeechEnd: () => {},
         startOnLoad: false,
+        baseAssetPath: 'http://127.0.0.1:8080/',
+        onnxWASMBasePath: 'http://127.0.0.1:8080/',
       });
 
       // Test with legacy model
@@ -79,6 +83,8 @@ test.describe('RealTimeVAD - MicVAD', () => {
         model: 'legacy',
         onSpeechEnd: () => {},
         startOnLoad: false,
+        baseAssetPath: 'http://127.0.0.1:8080/',
+        onnxWASMBasePath: 'http://127.0.0.1:8080/',
       });
 
       return {
@@ -100,6 +106,8 @@ test.describe('RealTimeVAD - MicVAD', () => {
         negativeSpeechThreshold: 0.3,
         onSpeechEnd: () => {},
         startOnLoad: false,
+        baseAssetPath: 'http://127.0.0.1:8080/',
+        onnxWASMBasePath: 'http://127.0.0.1:8080/',
       });
 
       return {
@@ -117,6 +125,8 @@ test.describe('RealTimeVAD - MicVAD', () => {
       const myvad = await vad.MicVAD.new({
         onSpeechEnd: () => {},
         startOnLoad: false,
+        baseAssetPath: 'http://127.0.0.1:8080/',
+        onnxWASMBasePath: 'http://127.0.0.1:8080/',
       });
 
       const initialListening = myvad.listening;
@@ -148,6 +158,8 @@ test.describe('RealTimeVAD - MicVAD', () => {
       const myvad = await vad.MicVAD.new({
         onSpeechEnd: () => {},
         startOnLoad: false,
+        baseAssetPath: 'http://127.0.0.1:8080/',
+        onnxWASMBasePath: 'http://127.0.0.1:8080/',
       });
 
       myvad.start();
@@ -181,6 +193,8 @@ test.describe('RealTimeVAD - Callbacks', () => {
         },
         onSpeechEnd: () => {},
         startOnLoad: false,
+        baseAssetPath: 'http://127.0.0.1:8080/',
+        onnxWASMBasePath: 'http://127.0.0.1:8080/',
       });
 
       myvad.start();
@@ -207,6 +221,8 @@ test.describe('RealTimeVAD - Callbacks', () => {
       const myvad = await vad.MicVAD.new({
         onSpeechEnd: () => {},
         startOnLoad: false,
+        baseAssetPath: 'http://127.0.0.1:8080/',
+        onnxWASMBasePath: 'http://127.0.0.1:8080/',
         workletOptions: {
           additionalAudioConstraints: {
             echoCancellation: true,
@@ -238,6 +254,8 @@ test.describe('RealTimeVAD - Error Handling', () => {
         await vad.MicVAD.new({
           positiveSpeechThreshold: 1.5, // Invalid: > 1
           onSpeechEnd: () => {},
+          baseAssetPath: 'http://127.0.0.1:8080/',
+          onnxWASMBasePath: 'http://127.0.0.1:8080/',
         });
         return { error: null };
       } catch (e: any) {

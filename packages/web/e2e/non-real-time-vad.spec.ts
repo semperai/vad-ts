@@ -220,6 +220,8 @@ test.describe('NonRealTimeVAD', () => {
       try {
         await vad.NonRealTimeVAD.new({
           positiveSpeechThreshold: 1.5, // Invalid: > 1
+          baseAssetPath: 'http://127.0.0.1:8080/',
+          onnxWASMBasePath: 'http://127.0.0.1:8080/',
         });
         return { error: null };
       } catch (e: any) {
