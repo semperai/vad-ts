@@ -8,7 +8,7 @@ describe('utils export', () => {
   })
 
   it('should have the expected utility functions', () => {
-    // These are re-exported from @ricky0123/vad-web
+    // These are re-exported from @semperai/vad-web
     expect(utils).toHaveProperty('audioFileToArray')
     expect(utils).toHaveProperty('minFramesForTargetMS')
     expect(utils).toHaveProperty('arrayBufferToBase64')

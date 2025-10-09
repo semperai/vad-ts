@@ -97,7 +97,7 @@ describe('asset-path', () => {
     })
 
     it('should handle CDN URLs', async () => {
-      const mockSrc = 'https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.27/dist/bundle.min.js'
+      const mockSrc = 'https://cdn.jsdelivr.net/npm/@semperai/vad-web@0.0.27/dist/bundle.min.js'
       // @ts-ignore
       global.window = {
         document: {
@@ -106,7 +106,7 @@ describe('asset-path', () => {
       }
 
       const { baseAssetPath } = await import('../src/asset-path')
-      expect(baseAssetPath).toBe('https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.27/dist/')
+      expect(baseAssetPath).toBe('https://cdn.jsdelivr.net/npm/@semperai/vad-web@0.0.27/dist/')
     })
 
     it('should handle relative paths', async () => {

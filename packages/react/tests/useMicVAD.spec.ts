@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, waitFor } from '@testing-library/react'
 import { useMicVAD } from '../src/index'
-import { MicVAD } from '@ricky0123/vad-web'
+import { MicVAD } from '@semperai/vad-web'
 
 // Mock the MicVAD class
-vi.mock('@ricky0123/vad-web', () => ({
+vi.mock('@semperai/vad-web', () => ({
   MicVAD: {
     new: vi.fn(),
   },
