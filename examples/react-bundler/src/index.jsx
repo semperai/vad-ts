@@ -1,4 +1,4 @@
-import { useMicVAD, utils } from "@ricky0123/vad-react"
+import { useMicVAD, utils } from "@semperai/vad-react"
 import React, { useState } from "react"
 import ReactDOM from "react-dom"
 
@@ -8,6 +8,13 @@ const domContainer = document.querySelector("#root")
 const root = ReactDOM.createRoot(domContainer)
 root.render(<App />)
 
+/**
+ * Root React component demonstrating useMicVAD and a recorded-audio playlist.
+ *
+ * Renders controls to toggle voice activity detection, live VAD status and user-speaking indicators, and a playlist of captured audio clips saved as WAV data URLs.
+ *
+ * @returns {JSX.Element} The rendered App component.
+ */
 function App() {
   const [audioList, setAudioList] = useState([])
   const vad = useMicVAD({
@@ -23,7 +30,7 @@ function App() {
   })
   return (
     <div>
-      <h1>Demo of @ricky0123/vad-react</h1>
+      <h1>Demo of @semperai/vad-react</h1>
       <button onClick={vad.toggle}>Toggle VAD</button>
       {vad.listening && <div>VAD is running</div>}
       {!vad.listening && <div>VAD is NOT running</div>}
