@@ -98,8 +98,12 @@ export async function audioFileToArray(audioFileData: Blob) {
   const reader = new FileReader()
   let audioBuffer: AudioBuffer | null = null
   await new Promise<void>((resolve, reject) => {
-    reader.addEventListener("loadend", () => {
-      const audioData = reader.result as ArrayBuffer
+    reader.addEventListener("load", () => {
+      const audioData = reader.result
+      if (!(audioData instanceof ArrayBuffer)) {
+        reject(new Error("Failed to load audio data"))
+        return
+      }
       ctx
         .decodeAudioData(audioData.slice(0))
         .then((buffer) => {
@@ -110,10 +114,16 @@ export async function audioFileToArray(audioFileData: Blob) {
           reject(new Error(`Failed to decode audio data: ${error}`))
         })
     })
+    reader.addEventListener("error", () => {
+      reject(new Error("Failed to read audio file"))
+    })
+    reader.addEventListener("abort", () => {
+      reject(new Error("Reading audio file was aborted"))
+    })
     reader.readAsArrayBuffer(audioFileData)
   })
   if (audioBuffer === null) {
-    throw Error("some shit")
+    throw new Error("Failed to decode audio data")
   }
   let _audioBuffer = audioBuffer as AudioBuffer
   let out = new Float32Array(_audioBuffer.length)

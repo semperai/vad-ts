@@ -44,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.27] - Earlier
 
-Previous versions tracked in git history. See https://github.com/ricky0123/vad for details.
+Previous versions tracked in git history. See [github.com/ricky0123/vad](https://github.com/ricky0123/vad) for details.
 
 ---
 

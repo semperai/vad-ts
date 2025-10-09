@@ -159,7 +159,7 @@ React hooks for easy integration:
 
 ### Project Structure
 
-```
+```text
 vad-ts/
 ├── packages/
 │   ├── web/           # Core VAD implementation

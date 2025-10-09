@@ -30,11 +30,16 @@ examples/*/package-lock.json
 /.sass-cache
 /connect.lock
 /coverage
+coverage/
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
 /typings
+
+# Test results and reports
+playwright-report/
+test-results/
 
 # System Files
 .DS_Store

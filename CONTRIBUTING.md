@@ -39,7 +39,7 @@ This will install all dependencies for the monorepo and both packages (web and r
 
 This is a monorepo containing two packages:
 
-```
+```text
 vad-ts/
 ├── packages/
 │   ├── web/          # Core VAD implementation for browsers
