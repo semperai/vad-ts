@@ -28,8 +28,8 @@ export default defineConfig({
 
   // Run local dev server before starting tests
   webServer: {
-    command: 'npm run build && npm run serve-test-site',
-    url: 'http://127.0.0.1:8080',
+    command: 'npm run serve-test-site',
+    url: 'http://127.0.0.1:8080/e2e-test.html',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },

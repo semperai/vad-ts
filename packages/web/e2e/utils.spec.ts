@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Utils - audioFileToArray', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to a page where we can load our VAD library
-    await page.goto('http://127.0.0.1:8080');
+    await page.goto('http://127.0.0.1:8080/e2e-test.html');
   });
 
   test('should convert audio file to Float32Array', async ({ page }) => {
@@ -131,7 +131,7 @@ test.describe('Utils - audioFileToArray', () => {
 
 test.describe('Utils - encodeWAV', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://127.0.0.1:8080');
+    await page.goto('http://127.0.0.1:8080/e2e-test.html');
   });
 
   test('should encode Float32Array to WAV format', async ({ page }) => {

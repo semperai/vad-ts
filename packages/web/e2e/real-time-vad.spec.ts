@@ -8,7 +8,7 @@ test.describe('RealTimeVAD - MicVAD', () => {
   test.beforeEach(async ({ page, context }) => {
     // Grant microphone permissions
     await context.grantPermissions(['microphone']);
-    await page.goto('http://127.0.0.1:8080');
+    await page.goto('http://127.0.0.1:8080/e2e-test.html');
   });
 
   test('should create MicVAD instance', async ({ page }) => {
@@ -167,7 +167,7 @@ test.describe('RealTimeVAD - MicVAD', () => {
 test.describe('RealTimeVAD - Callbacks', () => {
   test.beforeEach(async ({ page, context }) => {
     await context.grantPermissions(['microphone']);
-    await page.goto('http://127.0.0.1:8080');
+    await page.goto('http://127.0.0.1:8080/e2e-test.html');
   });
 
   test('should call onFrameProcessed callback', async ({ page }) => {
@@ -226,7 +226,7 @@ test.describe('RealTimeVAD - Callbacks', () => {
 
 test.describe('RealTimeVAD - Error Handling', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://127.0.0.1:8080');
+    await page.goto('http://127.0.0.1:8080/e2e-test.html');
   });
 
   test('should validate options', async ({ page }) => {

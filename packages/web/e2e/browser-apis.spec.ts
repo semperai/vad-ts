@@ -5,6 +5,10 @@ import { test, expect } from '@playwright/test';
  * These tests verify that the required browser APIs are available in a real browser environment
  */
 test.describe('Browser API Support', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://127.0.0.1:8080/e2e-test.html');
+  });
+
   test('should have AudioContext available', async ({ page }) => {
     const hasAudioContext = await page.evaluate(() => {
       return typeof AudioContext !== 'undefined' || typeof (window as any).webkitAudioContext !== 'undefined';

@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
  */
 test.describe('NonRealTimeVAD', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://127.0.0.1:8080');
+    await page.goto('http://127.0.0.1:8080/e2e-test.html');
   });
 
   test('should create NonRealTimeVAD instance', async ({ page }) => {

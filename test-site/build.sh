@@ -11,7 +11,10 @@ mkdir -p test-site/dist/subpath
 
 (
     cd test-site/src
-    find . -name "*.html" -exec cp --parents {} ../dist \;
+    find . -name "*.html" | while read -r file; do
+        mkdir -p "../dist/$(dirname "$file")"
+        cp "$file" "../dist/$file"
+    done
 )
 
 cp test-site/src/*.html test-site/dist
