@@ -5,6 +5,9 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
     "clean": "npm run clean --workspaces --if-present",
     "format": "prettier --write '{packages,examples,test-site}/**/*.{ts,tsx}'",
     "format-check": "prettier --check '{packages,examples,test-site}/**/*.{ts,tsx}'",
@@ -18,6 +21,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@playwright/test": "^1.56.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
