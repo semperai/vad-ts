@@ -199,7 +199,7 @@ global.fetch = vi.fn(() =>
     ok: true,
     arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
   })
-) as vi.Mock
+) as any
 
 // Mock console methods to reduce noise in tests
 global.console = {

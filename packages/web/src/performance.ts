@@ -102,8 +102,7 @@ export class VADPerformanceTracker {
 
     // Update average
     const sum = this.frameProcessingTimes.reduce((a, b) => a + b, 0)
-    this.metrics.avgFrameProcessingTime =
-      sum / this.frameProcessingTimes.length
+    this.metrics.avgFrameProcessingTime = sum / this.frameProcessingTimes.length
   }
 
   /**
@@ -216,11 +215,13 @@ export class VADPerformanceTracker {
     log.info(`Worklet Load: ${m.workletLoadTime.toFixed(2)}ms`)
     log.info(`Frames Processed: ${m.framesProcessed}`)
     log.info(
-      `Frame Processing: avg=${m.avgFrameProcessingTime.toFixed(2)}ms, min=${m.minFrameProcessingTime.toFixed(2)}ms, max=${m.maxFrameProcessingTime.toFixed(2)}ms`
+      `Frame Processing: avg=${m.avgFrameProcessingTime.toFixed(
+        2
+      )}ms, min=${m.minFrameProcessingTime.toFixed(
+        2
+      )}ms, max=${m.maxFrameProcessingTime.toFixed(2)}ms`
     )
-    log.info(
-      `Model Inference: avg=${m.avgModelInferenceTime.toFixed(2)}ms`
-    )
+    log.info(`Model Inference: avg=${m.avgModelInferenceTime.toFixed(2)}ms`)
     log.info(`Speech Segments: ${m.speechSegmentsDetected}`)
     log.info(`VAD Misfires: ${m.vadMisfires}`)
     log.info("===============================")

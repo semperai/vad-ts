@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
-import { useMicVAD } from '../src/index'
-import { MicVAD } from '@semperai/vad-web'
+import { MicVAD } from "@semperai/vad-web"
+import { renderHook, waitFor } from "@testing-library/react"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import { useMicVAD } from "../src/index"
 
-vi.mock('@semperai/vad-web', () => ({
+vi.mock("@semperai/vad-web", () => ({
   MicVAD: {
     new: vi.fn(),
   },
@@ -15,9 +15,9 @@ vi.mock('@semperai/vad-web', () => ({
     preSpeechPadMs: 800,
     minSpeechMs: 400,
     submitUserSpeechOnPause: false,
-    baseAssetPath: '',
-    onnxWASMBasePath: '',
-    model: 'v5',
+    baseAssetPath: "",
+    onnxWASMBasePath: "",
+    model: "v5",
     ortConfig: undefined,
     startOnLoad: false,
     onFrameProcessed: () => {},
@@ -30,11 +30,11 @@ vi.mock('@semperai/vad-web', () => ({
     resumeStream: async (stream: MediaStream) => stream,
     workletOptions: {},
   })),
-  DEFAULT_MODEL: 'v5',
+  DEFAULT_MODEL: "v5",
   utils: {},
 }))
 
-describe('useMicVAD - Integration Tests', () => {
+describe("useMicVAD - Integration Tests", () => {
   let mockVAD: any
 
   beforeEach(() => {
@@ -46,14 +46,13 @@ describe('useMicVAD - Integration Tests', () => {
     ;(MicVAD.new as any).mockResolvedValue(mockVAD)
   })
 
-  describe('Complete speech detection flow', () => {
-    it('should handle full speech detection lifecycle', async () => {
+  describe("Complete speech detection flow", () => {
+    it("should handle full speech detection lifecycle", async () => {
       const onSpeechStart = vi.fn()
       const onSpeechEnd = vi.fn()
       const onFrameProcessed = vi.fn()
 
       let capturedOptions: any
-
       ;(MicVAD.new as any).mockImplementation((options: any) => {
         capturedOptions = options
         return Promise.resolve(mockVAD)
@@ -82,7 +81,10 @@ describe('useMicVAD - Integration Tests', () => {
 
       // Frame with high speech probability
       capturedOptions.onFrameProcessed({ isSpeech: 0.8 }, mockFrame)
-      expect(onFrameProcessed).toHaveBeenCalledWith({ isSpeech: 0.8 }, mockFrame)
+      expect(onFrameProcessed).toHaveBeenCalledWith(
+        { isSpeech: 0.8 },
+        mockFrame
+      )
 
       await waitFor(() => {
         expect(result.current.userSpeaking).toBe(true)
@@ -105,11 +107,10 @@ describe('useMicVAD - Integration Tests', () => {
       })
     })
 
-    it('should handle VAD misfire', async () => {
+    it("should handle VAD misfire", async () => {
       const onVADMisfire = vi.fn()
 
       let capturedOptions: any
-
       ;(MicVAD.new as any).mockImplementation((options: any) => {
         capturedOptions = options
         return Promise.resolve(mockVAD)
@@ -132,14 +133,13 @@ describe('useMicVAD - Integration Tests', () => {
     })
   })
 
-  describe('Real-world scenarios', () => {
-    it('should handle user starting, speaking, and stopping', async () => {
+  describe("Real-world scenarios", () => {
+    it("should handle user starting, speaking, and stopping", async () => {
       const onSpeechStart = vi.fn()
       const onSpeechEnd = vi.fn()
       const speechSegments: Float32Array[] = []
 
       let capturedOptions: any
-
       ;(MicVAD.new as any).mockImplementation((options: any) => {
         capturedOptions = options
         return Promise.resolve(mockVAD)
@@ -200,13 +200,12 @@ describe('useMicVAD - Integration Tests', () => {
       expect(onSpeechEnd).toHaveBeenCalledTimes(2)
     })
 
-    it('should handle continuous operation with callback updates', async () => {
+    it("should handle continuous operation with callback updates", async () => {
       const callbacks = {
         onSpeechEnd: vi.fn(),
       }
 
       let capturedOptions: any
-
       ;(MicVAD.new as any).mockImplementation((options: any) => {
         capturedOptions = options
         return Promise.resolve(mockVAD)
@@ -243,10 +242,9 @@ describe('useMicVAD - Integration Tests', () => {
     })
   })
 
-  describe('Edge cases', () => {
-    it('should handle extremely high userSpeakingThreshold', async () => {
+  describe("Edge cases", () => {
+    it("should handle extremely high userSpeakingThreshold", async () => {
       let capturedOptions: any
-
       ;(MicVAD.new as any).mockImplementation((options: any) => {
         capturedOptions = options
         return Promise.resolve(mockVAD)
@@ -264,23 +262,28 @@ describe('useMicVAD - Integration Tests', () => {
       })
 
       // Even high probability shouldn't trigger
-      capturedOptions.onFrameProcessed({ isSpeech: 0.95 }, new Float32Array(1536))
+      capturedOptions.onFrameProcessed(
+        { isSpeech: 0.95 },
+        new Float32Array(1536)
+      )
 
       await waitFor(() => {
         expect(result.current.userSpeaking).toBe(false)
       })
 
       // Only very high values should trigger
-      capturedOptions.onFrameProcessed({ isSpeech: 0.995 }, new Float32Array(1536))
+      capturedOptions.onFrameProcessed(
+        { isSpeech: 0.995 },
+        new Float32Array(1536)
+      )
 
       await waitFor(() => {
         expect(result.current.userSpeaking).toBe(true)
       })
     })
 
-    it('should handle extremely low userSpeakingThreshold', async () => {
+    it("should handle extremely low userSpeakingThreshold", async () => {
       let capturedOptions: any
-
       ;(MicVAD.new as any).mockImplementation((options: any) => {
         capturedOptions = options
         return Promise.resolve(mockVAD)
@@ -298,16 +301,18 @@ describe('useMicVAD - Integration Tests', () => {
       })
 
       // Even low probability should trigger
-      capturedOptions.onFrameProcessed({ isSpeech: 0.15 }, new Float32Array(1536))
+      capturedOptions.onFrameProcessed(
+        { isSpeech: 0.15 },
+        new Float32Array(1536)
+      )
 
       await waitFor(() => {
         expect(result.current.userSpeaking).toBe(true)
       })
     })
 
-    it('should handle boundary value at exact threshold', async () => {
+    it("should handle boundary value at exact threshold", async () => {
       let capturedOptions: any
-
       ;(MicVAD.new as any).mockImplementation((options: any) => {
         capturedOptions = options
         return Promise.resolve(mockVAD)
@@ -325,14 +330,20 @@ describe('useMicVAD - Integration Tests', () => {
       })
 
       // Exactly at threshold should not trigger (needs to be greater)
-      capturedOptions.onFrameProcessed({ isSpeech: 0.6 }, new Float32Array(1536))
+      capturedOptions.onFrameProcessed(
+        { isSpeech: 0.6 },
+        new Float32Array(1536)
+      )
 
       await waitFor(() => {
         expect(result.current.userSpeaking).toBe(false)
       })
 
       // Just above threshold should trigger
-      capturedOptions.onFrameProcessed({ isSpeech: 0.601 }, new Float32Array(1536))
+      capturedOptions.onFrameProcessed(
+        { isSpeech: 0.601 },
+        new Float32Array(1536)
+      )
 
       await waitFor(() => {
         expect(result.current.userSpeaking).toBe(true)

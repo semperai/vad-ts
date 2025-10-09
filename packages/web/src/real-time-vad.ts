@@ -7,17 +7,7 @@ import {
   defaultFrameProcessorOptions,
   validateOptions,
 } from "./frame-processor"
-import { log, configureLogging, type LogConfig } from "./logging"
-import {
-  AudioContextError,
-  ModelLoadError,
-  WorkletLoadError,
-  validateAudioContextState,
-  validateModelURL,
-  validateWorkletURL,
-  checkUserMediaSupport,
-} from "./validation"
-import { VADPerformanceTracker } from "./performance"
+import { configureLogging, log, type LogConfig } from "./logging"
 import { Message } from "./messages"
 import {
   Model,
@@ -27,7 +17,17 @@ import {
   SileroV5,
   SpeechProbabilities,
 } from "./models"
+import { VADPerformanceTracker } from "./performance"
 import { Resampler } from "./resampler"
+import {
+  AudioContextError,
+  ModelLoadError,
+  WorkletLoadError,
+  checkUserMediaSupport,
+  validateAudioContextState,
+  validateModelURL,
+  validateWorkletURL,
+} from "./validation"
 
 export const DEFAULT_MODEL = "legacy"
 
@@ -228,9 +228,18 @@ export class MicVAD {
       }
 
       // Initialize AudioNodeVAD
-      audioNodeVAD = await AudioNodeVAD.new(audioContext, fullOptions, perfTracker)
+      audioNodeVAD = await AudioNodeVAD.new(
+        audioContext,
+        fullOptions,
+        perfTracker
+      )
 
-      const micVad = new MicVAD(fullOptions, audioContext, audioNodeVAD, perfTracker)
+      const micVad = new MicVAD(
+        fullOptions,
+        audioContext,
+        audioNodeVAD,
+        perfTracker
+      )
 
       if (fullOptions.startOnLoad) {
         try {
@@ -313,11 +322,16 @@ export class MicVAD {
    * @throws {AudioContextError} If microphone access is denied or stream creation fails
    */
   start = async () => {
-    log.debug('[MicVAD] start() called, initialized:', this.initialized, 'stream active:', this.stream?.active)
+    log.debug(
+      "[MicVAD] start() called, initialized:",
+      this.initialized,
+      "stream active:",
+      this.stream?.active
+    )
 
     try {
       if (!this.initialized) {
-        log.debug('[MicVAD] First time initialization')
+        log.debug("[MicVAD] First time initialization")
         this.initialized = true
 
         try {
@@ -334,12 +348,14 @@ export class MicVAD {
           this.sourceNode = new MediaStreamAudioSourceNode(this.audioContext, {
             mediaStream: this.stream,
           })
-          log.debug('[MicVAD] Created MediaStreamAudioSourceNode, now connecting to VAD')
+          log.debug(
+            "[MicVAD] Created MediaStreamAudioSourceNode, now connecting to VAD"
+          )
           this.audioNodeVAD.receive(this.sourceNode)
         } catch (error) {
           // Cleanup stream on error
           if (this.stream) {
-            this.stream.getTracks().forEach(track => track.stop())
+            this.stream.getTracks().forEach((track) => track.stop())
             this.stream = undefined
           }
           this.initialized = false
@@ -351,19 +367,19 @@ export class MicVAD {
       }
 
       if (!this.stream?.active) {
-        log.debug('[MicVAD] Stream not active, resuming')
+        log.debug("[MicVAD] Stream not active, resuming")
         await this.resume()
         this.audioNodeVAD.start()
         this.listening = true
       } else {
-        log.debug('[MicVAD] Stream already active, just starting processor')
+        log.debug("[MicVAD] Stream already active, just starting processor")
         this.audioNodeVAD.start()
         this.listening = true
       }
 
-      log.info('[MicVAD] Start complete, listening:', this.listening)
+      log.info("[MicVAD] Start complete, listening:", this.listening)
     } catch (error) {
-      log.error('[MicVAD] Error in start():', error)
+      log.error("[MicVAD] Error in start():", error)
       throw error
     }
   }
@@ -430,7 +446,8 @@ export class AudioNodeVAD {
     } as RealTimeVADOptions
 
     const performanceTracker =
-      perfTracker ?? new VADPerformanceTracker(fullOptions.enablePerformanceTracking ?? false)
+      perfTracker ??
+      new VADPerformanceTracker(fullOptions.enablePerformanceTracking ?? false)
 
     // Configure logging if specified
     if (fullOptions.logConfig) {
@@ -522,18 +539,19 @@ export class AudioNodeVAD {
       "audioWorklet" in this.ctx && typeof AudioWorkletNode === "function"
     if (hasAudioWorklet) {
       try {
-        const workletURL = this.options.baseAssetPath + workletFile + '?v=' + Date.now()
+        const workletURL =
+          this.options.baseAssetPath + workletFile + "?v=" + Date.now()
 
         // Validate worklet URL
         validateWorkletURL(workletURL)
 
-        log.info('[VAD] Loading worklet from:', workletURL)
+        log.info("[VAD] Loading worklet from:", workletURL)
 
         try {
           const workletTimer = this.performanceTracker.startTiming()
           await this.ctx.audioWorklet.addModule(workletURL)
           this.performanceTracker.recordWorkletLoad(workletTimer.end())
-          log.info('[VAD] Worklet loaded successfully')
+          log.info("[VAD] Worklet loaded successfully")
         } catch (error) {
           throw new WorkletLoadError(
             `Failed to load worklet from ${workletURL}`,
@@ -553,14 +571,13 @@ export class AudioNodeVAD {
           workletOptions
         )
 
-        log.info('[VAD] AudioWorkletNode created successfully')
-
+        log.info("[VAD] AudioWorkletNode created successfully")
         ;(this.audioNode as AudioWorkletNode).port.onmessage = async (
           ev: MessageEvent
         ) => {
           switch (ev.data?.message) {
-            case 'WORKLET_INITIALIZED':
-              log.debug('[VAD] Worklet initialized!', ev.data);
+            case "WORKLET_INITIALIZED":
+              log.debug("[VAD] Worklet initialized!", ev.data)
               break
             case Message.AudioFrame:
               let buffer: ArrayBuffer = ev.data.data
@@ -580,7 +597,7 @@ export class AudioNodeVAD {
         this.gainNode.gain.value = 0
         this.audioNode.connect(this.gainNode)
         this.gainNode.connect(this.ctx.destination)
-        log.info('[VAD] AudioWorkletNode connected to audio graph')
+        log.info("[VAD] AudioWorkletNode connected to audio graph")
 
         return
       } catch (error) {
@@ -593,7 +610,9 @@ export class AudioNodeVAD {
     }
 
     // ScriptProcessor fallback
-    log.info('[VAD] Using ScriptProcessor fallback (AudioWorklet not available)')
+    log.info(
+      "[VAD] Using ScriptProcessor fallback (AudioWorklet not available)"
+    )
 
     // Initialize resampler for ScriptProcessor
     this.resampler = new Resampler({
@@ -647,26 +666,26 @@ export class AudioNodeVAD {
   }
 
   start = () => {
-    console.log('[AudioNodeVAD] start() called, resuming frame processor')
+    console.log("[AudioNodeVAD] start() called, resuming frame processor")
     this.frameProcessor.resume()
   }
 
   receive = (node: AudioNode) => {
-    console.log('[VAD] Connecting source node to AudioWorkletNode')
-    console.log('[VAD] AudioContext state:', this.ctx.state)
+    console.log("[VAD] Connecting source node to AudioWorkletNode")
+    console.log("[VAD] AudioContext state:", this.ctx.state)
 
     // FIX: Resume AudioContext if suspended
-    if (this.ctx.state === 'suspended') {
-      console.log('[VAD] AudioContext is suspended, resuming...')
+    if (this.ctx.state === "suspended") {
+      console.log("[VAD] AudioContext is suspended, resuming...")
       this.ctx.resume().then(() => {
-        console.log('[VAD] AudioContext resumed, state:', this.ctx.state)
+        console.log("[VAD] AudioContext resumed, state:", this.ctx.state)
       })
     }
 
-    console.log('[VAD] Source node:', node)
-    console.log('[VAD] AudioWorkletNode:', this.audioNode)
+    console.log("[VAD] Source node:", node)
+    console.log("[VAD] AudioWorkletNode:", this.audioNode)
     node.connect(this.audioNode)
-    console.log('[VAD] Source connected successfully')
+    console.log("[VAD] Source connected successfully")
   }
 
   processFrame = async (frame: Float32Array) => {

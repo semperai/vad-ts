@@ -1,5 +1,5 @@
-import { expect, afterEach, vi } from 'vitest'
-import { cleanup } from '@testing-library/react'
+import { cleanup } from "@testing-library/react"
+import { afterEach, vi } from "vitest"
 
 // Cleanup after each test
 afterEach(() => {
@@ -8,7 +8,7 @@ afterEach(() => {
 
 // Mock MediaStream and related APIs
 global.MediaStream = class MediaStream {
-  id = 'mock-stream'
+  id = "mock-stream"
   active = true
   getTracks() {
     return []
@@ -29,7 +29,7 @@ global.MediaStream = class MediaStream {
 } as any
 
 // Mock navigator.mediaDevices
-Object.defineProperty(global.navigator, 'mediaDevices', {
+Object.defineProperty(global.navigator, "mediaDevices", {
   writable: true,
   value: {
     getUserMedia: vi.fn(),

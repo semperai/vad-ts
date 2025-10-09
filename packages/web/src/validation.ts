@@ -160,9 +160,7 @@ export function validateAudioContextState(ctx: AudioContext): void {
   }
 
   if (ctx.state === "suspended") {
-    log.warn(
-      "AudioContext is suspended. It will be resumed when VAD starts."
-    )
+    log.warn("AudioContext is suspended. It will be resumed when VAD starts.")
   }
 
   log.debug("AudioContext state validated:", ctx.state)

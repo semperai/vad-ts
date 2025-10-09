@@ -4,7 +4,7 @@ import {
   MicVAD,
   getDefaultRealTimeVADOptions,
 } from "@semperai/vad-web"
-import { useEffect, useState, useRef, useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 export { utils } from "@semperai/vad-web"
 
@@ -113,7 +113,8 @@ export function useMicVAD(options: Partial<ReactRealTimeVADOptions>) {
         const finalVadOptions: RealTimeVADOptions = {
           ...vadOptions,
           onFrameProcessed: (probs: any, frame: any) => {
-            const isSpeaking = probs.isSpeech > reactOptions.userSpeakingThreshold
+            const isSpeaking =
+              probs.isSpeech > reactOptions.userSpeakingThreshold
             updateUserSpeaking(isSpeaking)
             onFrameProcessedRef.current(probs, frame)
           },

@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
-import { useMicVAD } from '../src/index'
-import { MicVAD } from '@semperai/vad-web'
+import { MicVAD } from "@semperai/vad-web"
+import { renderHook, waitFor } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { useMicVAD } from "../src/index"
 
 // Mock the MicVAD class
-vi.mock('@semperai/vad-web', () => ({
+vi.mock("@semperai/vad-web", () => ({
   MicVAD: {
     new: vi.fn(),
   },
@@ -16,9 +16,9 @@ vi.mock('@semperai/vad-web', () => ({
     preSpeechPadFrames: 1,
     minSpeechFrames: 3,
     submitUserSpeechOnPause: false,
-    baseAssetPath: '',
-    onnxWASMBasePath: '',
-    model: 'v5',
+    baseAssetPath: "",
+    onnxWASMBasePath: "",
+    model: "v5",
     ortConfig: undefined,
     startOnLoad: false,
     onFrameProcessed: () => {},
@@ -31,11 +31,11 @@ vi.mock('@semperai/vad-web', () => ({
     resumeStream: async (stream: MediaStream) => stream,
     workletOptions: {},
   })),
-  DEFAULT_MODEL: 'v5',
+  DEFAULT_MODEL: "v5",
   utils: {},
 }))
 
-describe('useMicVAD', () => {
+describe("useMicVAD", () => {
   let mockVAD: any
 
   beforeEach(() => {
@@ -51,7 +51,7 @@ describe('useMicVAD', () => {
     vi.clearAllMocks()
   })
 
-  it('should initialize with loading state', () => {
+  it("should initialize with loading state", () => {
     const { result } = renderHook(() =>
       useMicVAD({
         onSpeechEnd: () => {},
@@ -64,7 +64,7 @@ describe('useMicVAD', () => {
     expect(result.current.errored).toBe(false)
   })
 
-  it('should initialize VAD and set loading to false', async () => {
+  it("should initialize VAD and set loading to false", async () => {
     const { result } = renderHook(() =>
       useMicVAD({
         onSpeechEnd: () => {},
@@ -78,7 +78,7 @@ describe('useMicVAD', () => {
     expect(MicVAD.new).toHaveBeenCalled()
   })
 
-  it('should start listening when startOnLoad is true', async () => {
+  it("should start listening when startOnLoad is true", async () => {
     const { result } = renderHook(() =>
       useMicVAD({
         onSpeechEnd: () => {},
@@ -94,7 +94,7 @@ describe('useMicVAD', () => {
     expect(result.current.listening).toBe(true)
   })
 
-  it('should handle start and pause', async () => {
+  it("should handle start and pause", async () => {
     const { result } = renderHook(() =>
       useMicVAD({
         onSpeechEnd: () => {},
@@ -120,7 +120,7 @@ describe('useMicVAD', () => {
     expect(mockVAD.pause).toHaveBeenCalled()
   })
 
-  it('should toggle listening state', async () => {
+  it("should toggle listening state", async () => {
     const { result } = renderHook(() =>
       useMicVAD({
         onSpeechEnd: () => {},
@@ -144,8 +144,8 @@ describe('useMicVAD', () => {
     })
   })
 
-  it('should handle errors during initialization', async () => {
-    const error = new Error('Failed to initialize')
+  it("should handle errors during initialization", async () => {
+    const error = new Error("Failed to initialize")
     ;(MicVAD.new as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() =>
@@ -158,10 +158,10 @@ describe('useMicVAD', () => {
       expect(result.current.loading).toBe(false)
     })
 
-    expect(result.current.errored).toBe('Failed to initialize')
+    expect(result.current.errored).toBe("Failed to initialize")
   })
 
-  it('should destroy VAD on unmount', async () => {
+  it("should destroy VAD on unmount", async () => {
     const { result, unmount } = renderHook(() =>
       useMicVAD({
         onSpeechEnd: () => {},
@@ -177,13 +177,12 @@ describe('useMicVAD', () => {
     expect(mockVAD.destroy).toHaveBeenCalled()
   })
 
-  it('should call callbacks through refs', async () => {
+  it("should call callbacks through refs", async () => {
     const onSpeechEnd = vi.fn()
     const onSpeechStart = vi.fn()
     const onFrameProcessed = vi.fn()
 
     let capturedOptions: any
-
     ;(MicVAD.new as any).mockImplementation((options: any) => {
       capturedOptions = options
       return Promise.resolve(mockVAD)
@@ -215,9 +214,8 @@ describe('useMicVAD', () => {
     expect(onSpeechEnd).toHaveBeenCalledWith(mockAudio)
   })
 
-  it('should update userSpeaking based on speech probability threshold', async () => {
+  it("should update userSpeaking based on speech probability threshold", async () => {
     let capturedOptions: any
-
     ;(MicVAD.new as any).mockImplementation((options: any) => {
       capturedOptions = options
       return Promise.resolve(mockVAD)
@@ -250,7 +248,7 @@ describe('useMicVAD', () => {
     })
   })
 
-  it('should recreate VAD when getStream changes', async () => {
+  it("should recreate VAD when getStream changes", async () => {
     // Use named functions so they have different toString() values
     const getStream1 = async function getStream1() {
       return new MediaStream()
@@ -279,7 +277,9 @@ describe('useMicVAD', () => {
 
     await waitFor(
       () => {
-        expect((MicVAD.new as any).mock.calls.length).toBeGreaterThan(firstCallCount)
+        expect((MicVAD.new as any).mock.calls.length).toBeGreaterThan(
+          firstCallCount
+        )
       },
       { timeout: 3000 }
     )

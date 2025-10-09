@@ -58,7 +58,9 @@ function getLog(level: Level): LogFn {
     }
 
     const prefix = currentConfig.prefix ?? LOG_PREFIX
-    const timestamp = currentConfig.timestamps ? `[${new Date().toISOString()}]` : ""
+    const timestamp = currentConfig.timestamps
+      ? `[${new Date().toISOString()}]`
+      : ""
 
     const logArgs = timestamp ? [prefix, timestamp, ...args] : [prefix, ...args]
 

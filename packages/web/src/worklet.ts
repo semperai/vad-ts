@@ -1,13 +1,13 @@
 // VAD AudioWorklet Processor
 // Based on @ricky0123/vad-web but fixed to ensure process() is called
 
-const LOG_PREFIX = "[VAD Worklet]";
+const LOG_PREFIX = "[VAD Worklet]"
 const log = {
   debug: (...args: unknown[]) => console.debug(LOG_PREFIX, ...args),
   info: (...args: unknown[]) => console.log(LOG_PREFIX, ...args),
   error: (...args: unknown[]) => console.error(LOG_PREFIX, ...args),
   warn: (...args: unknown[]) => console.warn(LOG_PREFIX, ...args),
-};
+}
 
 const Message = {
   AudioFrame: "AUDIO_FRAME",
@@ -17,36 +17,38 @@ const Message = {
   SpeechStop: "SPEECH_STOP",
   SpeechRealStart: "SPEECH_REAL_START",
   FrameProcessed: "FRAME_PROCESSED",
-};
+}
 
 interface ResamplerOptions {
-  nativeSampleRate: number;
-  targetSampleRate: number;
-  targetFrameSize: number;
+  nativeSampleRate: number
+  targetSampleRate: number
+  targetFrameSize: number
 }
 
 class Resampler {
-  options: ResamplerOptions;
-  inputBuffer: number[];
+  options: ResamplerOptions
+  inputBuffer: number[]
 
   constructor(options: ResamplerOptions) {
-    this.options = options;
+    this.options = options
     if (options.nativeSampleRate < 16000) {
-      log.error("nativeSampleRate is too low. Should have 16000 = targetSampleRate <= nativeSampleRate");
+      log.error(
+        "nativeSampleRate is too low. Should have 16000 = targetSampleRate <= nativeSampleRate"
+      )
     }
-    this.inputBuffer = [];
+    this.inputBuffer = []
   }
 
   process(inputFrame: Float32Array): Float32Array[] {
-    const outputFrames = [];
+    const outputFrames = []
     for (const sample of inputFrame) {
-      this.inputBuffer.push(sample);
+      this.inputBuffer.push(sample)
       while (this.hasEnoughDataForFrame()) {
-        const frame = this.generateOutputFrame();
-        outputFrames.push(frame);
+        const frame = this.generateOutputFrame()
+        outputFrames.push(frame)
       }
     }
-    return outputFrames;
+    return outputFrames
   }
 
   hasEnoughDataForFrame() {
@@ -54,17 +56,17 @@ class Resampler {
       (this.inputBuffer.length * this.options.targetSampleRate) /
         this.options.nativeSampleRate >=
       this.options.targetFrameSize
-    );
+    )
   }
 
   generateOutputFrame() {
-    const outputFrame = new Float32Array(this.options.targetFrameSize);
-    let outputIndex = 0;
-    let inputIndex = 0;
+    const outputFrame = new Float32Array(this.options.targetFrameSize)
+    let outputIndex = 0
+    let inputIndex = 0
 
     while (outputIndex < this.options.targetFrameSize) {
-      let sum = 0;
-      let count = 0;
+      let sum = 0
+      let count = 0
 
       while (
         inputIndex <
@@ -74,69 +76,69 @@ class Resampler {
             this.options.targetSampleRate
         )
       ) {
-        const sample = this.inputBuffer[inputIndex];
+        const sample = this.inputBuffer[inputIndex]
         if (sample !== undefined) {
-          sum += sample;
-          count++;
+          sum += sample
+          count++
         }
-        inputIndex++;
+        inputIndex++
       }
 
-      outputFrame[outputIndex] = sum / count;
-      outputIndex++;
+      outputFrame[outputIndex] = sum / count
+      outputIndex++
     }
 
-    this.inputBuffer = this.inputBuffer.slice(inputIndex);
-    return outputFrame;
+    this.inputBuffer = this.inputBuffer.slice(inputIndex)
+    return outputFrame
   }
 }
 
 interface WorkletOptions {
-  frameSamples: number;
+  frameSamples: number
 }
 
 class VadWorkletProcessor extends AudioWorkletProcessor {
-  options: WorkletOptions;
-  resampler!: Resampler;
-  _initialized: boolean;
-  _stopProcessing: boolean;
-  _frameCount: number;
+  options: WorkletOptions
+  resampler!: Resampler
+  _initialized: boolean
+  _stopProcessing: boolean
+  _frameCount: number
 
   constructor(options: AudioWorkletNodeOptions) {
-    super();
-    this._initialized = false;
-    this._stopProcessing = false;
-    this._frameCount = 0;
-    this.options = options.processorOptions;
+    super()
+    this._initialized = false
+    this._stopProcessing = false
+    this._frameCount = 0
+    this.options = options.processorOptions
 
-    log.debug("Worklet constructor called with options:", this.options);
+    log.debug("Worklet constructor called with options:", this.options)
 
     this.port.onmessage = (ev) => {
       if (ev.data.message === Message.SpeechStop) {
-        log.debug("Received SpeechStop message");
-        this._stopProcessing = true;
+        log.debug("Received SpeechStop message")
+        this._stopProcessing = true
       }
-    };
+    }
 
-    this.init();
+    this.init()
   }
 
   async init() {
-    log.info("Initializing worklet, sampleRate:", sampleRate);
+    log.info("Initializing worklet, sampleRate:", sampleRate)
     this.resampler = new Resampler({
       nativeSampleRate: sampleRate,
       targetSampleRate: 16000,
       targetFrameSize: this.options.frameSamples,
-    });
-    this._initialized = true;
-    log.info("Worklet initialized successfully");
+    })
+    this._initialized = true
+    log.info("Worklet initialized successfully")
 
     // Send initialization message to main thread
     this.port.postMessage({
       message: "WORKLET_INITIALIZED",
       sampleRate: sampleRate,
-      frameSamples: this.options.frameSamples
-    });
+      frameSamples: this.options.frameSamples,
+    })
   }
 
   process(
@@ -145,38 +147,52 @@ class VadWorkletProcessor extends AudioWorkletProcessor {
     _parameters: Record<string, Float32Array>
   ): boolean {
     if (this._stopProcessing) {
-      log.debug("Stop processing flag set, returning false");
-      return false;
+      log.debug("Stop processing flag set, returning false")
+      return false
     }
 
-    const input = inputs[0];
-    const channel = input ? input[0] : null;
+    const input = inputs[0]
+    const channel = input ? input[0] : null
 
     // Log first few frames to verify we're receiving audio
     if (this._frameCount < 5) {
-      log.debug(`Process called, frame ${this._frameCount}, input:`, input, 'channel:', channel, 'initialized:', this._initialized);
-      this._frameCount++;
+      log.debug(
+        `Process called, frame ${this._frameCount}, input:`,
+        input,
+        "channel:",
+        channel,
+        "initialized:",
+        this._initialized
+      )
+      this._frameCount++
     }
 
-    if (this._initialized && channel instanceof Float32Array && channel.length > 0) {
-      const frames = this.resampler.process(channel);
+    if (
+      this._initialized &&
+      channel instanceof Float32Array &&
+      channel.length > 0
+    ) {
+      const frames = this.resampler.process(channel)
 
       if (this._frameCount === 5 && frames.length > 0) {
-        log.debug(`Posting ${frames.length} frames back to main thread`);
+        log.debug(`Posting ${frames.length} frames back to main thread`)
       }
 
       for (const frame of frames) {
         this.port.postMessage(
           { message: Message.AudioFrame, data: frame.buffer },
           [frame.buffer]
-        );
+        )
       }
     } else if (this._frameCount < 10 && this._initialized) {
-      log.warn(`No valid audio data in frame ${this._frameCount}, channel:`, channel);
+      log.warn(
+        `No valid audio data in frame ${this._frameCount}, channel:`,
+        channel
+      )
     }
 
-    return true;
+    return true
   }
 }
 
-registerProcessor("vad-helper-worklet", VadWorkletProcessor);
+registerProcessor("vad-helper-worklet", VadWorkletProcessor)
