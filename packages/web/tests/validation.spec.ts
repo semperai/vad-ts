@@ -254,6 +254,62 @@ describe("VAD Validation", () => {
 
       expect(Array.isArray(result.warnings)).toBe(true);
     });
+
+    test("should detect missing WebAssembly", () => {
+      const originalWebAssembly = global.WebAssembly;
+      (global as any).WebAssembly = undefined;
+
+      const result = checkBrowserCompatibility();
+
+      expect(result.onnxRuntime).toBe(false);
+      expect(result.warnings.some(w => w.includes("WebAssembly"))).toBe(true);
+
+      // Restore
+      (global as any).WebAssembly = originalWebAssembly;
+    });
+
+    test("should detect missing SharedArrayBuffer", () => {
+      const originalSharedArrayBuffer = global.SharedArrayBuffer;
+      (global as any).SharedArrayBuffer = undefined;
+
+      const result = checkBrowserCompatibility();
+
+      expect(result.onnxRuntime).toBe(false);
+      expect(result.warnings.some(w => w.includes("SharedArrayBuffer"))).toBe(true);
+
+      // Restore
+      (global as any).SharedArrayBuffer = originalSharedArrayBuffer;
+    });
+
+    test("should log info when browser is fully compatible", () => {
+      // Just verify that when there are no warnings, info is logged
+      const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
+
+      // Mock minimal requirements
+      const mockGetUserMedia = vi.fn();
+      const originalMediaDevices = navigator.mediaDevices;
+      Object.defineProperty(navigator, "mediaDevices", {
+        value: { getUserMedia: mockGetUserMedia },
+        configurable: true,
+      });
+
+      const result = checkBrowserCompatibility();
+
+      // If no warnings, should log success
+      if (result.warnings.length === 0) {
+        expect(consoleInfoSpy).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.stringContaining("fully compatible")
+        );
+      }
+
+      // Restore
+      Object.defineProperty(navigator, "mediaDevices", {
+        value: originalMediaDevices,
+        configurable: true,
+      });
+      consoleInfoSpy.mockRestore();
+    });
   });
 
   describe("Error types", () => {

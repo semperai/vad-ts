@@ -226,6 +226,56 @@ describe("FrameProcessor", () => {
       expect(processor.speaking).toBe(false);
       expect(mockModelReset).toHaveBeenCalled();
     });
+
+    test("pause with submitUserSpeechOnPause should call endSegment", () => {
+      const processor = new FrameProcessor(
+        mockModelProcess,
+        mockModelReset,
+        {
+          ...defaultFrameProcessorOptions,
+          submitUserSpeechOnPause: true,
+          minSpeechMs: 100  // Low threshold
+        },
+        32
+      );
+
+      processor.resume();
+      processor.speaking = true;
+      // Add enough speech frames to meet minSpeechFrames requirement
+      processor.audioBuffer = [
+        { frame: new Float32Array(512), isSpeech: true },
+        { frame: new Float32Array(512), isSpeech: true },
+        { frame: new Float32Array(512), isSpeech: true },
+        { frame: new Float32Array(512), isSpeech: true },
+        { frame: new Float32Array(512), isSpeech: true },
+        { frame: new Float32Array(512), isSpeech: true },
+        { frame: new Float32Array(512), isSpeech: true },
+      ];
+
+      processor.pause(mockHandleEvent);
+
+      expect(processor.active).toBe(false);
+      expect(mockHandleEvent).toHaveBeenCalledWith(
+        expect.objectContaining({ msg: Message.SpeechEnd })
+      );
+    });
+
+    test("process should return early when not active", async () => {
+      const processor = new FrameProcessor(
+        mockModelProcess,
+        mockModelReset,
+        defaultFrameProcessorOptions,
+        32
+      );
+
+      // Don't call resume, so processor is not active
+      const frame = new Float32Array(512);
+      await processor.process(frame, mockHandleEvent);
+
+      // Should not call model process or handle events
+      expect(mockModelProcess).not.toHaveBeenCalled();
+      expect(mockHandleEvent).not.toHaveBeenCalled();
+    });
   });
 
   describe("process - speech detection", () => {

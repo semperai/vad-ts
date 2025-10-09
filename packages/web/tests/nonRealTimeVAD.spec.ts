@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { NonRealTimeVAD } from '../src/non-real-time-vad'
+import { NonRealTimeVAD, defaultNonRealTimeVADOptions } from '../src/non-real-time-vad'
 
 describe('NonRealTimeVAD', () => {
+
   describe('exports', () => {
     it('should export NonRealTimeVAD class', () => {
       expect(NonRealTimeVAD).toBeDefined()
@@ -11,6 +12,12 @@ describe('NonRealTimeVAD', () => {
     it('should be a constructor', () => {
       expect(NonRealTimeVAD.prototype).toBeDefined()
       expect(NonRealTimeVAD.prototype.constructor).toBe(NonRealTimeVAD)
+    })
+
+    it('should export defaultNonRealTimeVADOptions', () => {
+      expect(defaultNonRealTimeVADOptions).toBeDefined()
+      expect(defaultNonRealTimeVADOptions).toHaveProperty('modelURL')
+      expect(defaultNonRealTimeVADOptions).toHaveProperty('modelFetcher')
     })
   })
 })

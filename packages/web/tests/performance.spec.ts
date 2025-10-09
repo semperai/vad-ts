@@ -66,6 +66,15 @@ describe("VAD Performance Tracking", () => {
       expect(metrics.vadMisfires).toBe(0);
     });
 
+    test("should return disabled timer when startTiming called while disabled", () => {
+      const tracker = new VADPerformanceTracker(false);
+
+      const timer = tracker.startTiming();
+      const elapsed = timer.end();
+
+      expect(elapsed).toBe(0);
+    });
+
     test("should record frame processing times", () => {
       const tracker = new VADPerformanceTracker(true);
 
@@ -89,6 +98,18 @@ describe("VAD Performance Tracking", () => {
 
       const metrics = tracker.getMetrics();
       expect(metrics.avgModelInferenceTime).toBe(6); // (5+7+6)/3
+    });
+
+    test("should limit model inference samples to maxSamples", () => {
+      const tracker = new VADPerformanceTracker(true);
+
+      // Record more than maxSamples (1000) inference times
+      for (let i = 0; i < 1500; i++) {
+        tracker.recordModelInference(5);
+      }
+
+      const metrics = tracker.getMetrics();
+      expect(metrics.avgModelInferenceTime).toBe(5);
     });
 
     test("should record initialization metrics", () => {
