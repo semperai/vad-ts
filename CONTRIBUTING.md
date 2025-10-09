@@ -16,8 +16,8 @@ Thank you for your interest in contributing to this project! This guide will hel
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/vad.git`
-3. Add upstream remote: `git remote add upstream https://github.com/ricky0123/vad.git`
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/vad-ts.git`
+3. Add upstream remote: `git remote add upstream https://github.com/semperai/vad-ts.git`
 4. Create a new branch: `git checkout -b feature/your-feature-name`
 
 ## Development Setup
@@ -65,8 +65,8 @@ npm run build
 
 Build a specific package:
 ```bash
-npm run build -w @ricky0123/vad-web
-npm run build -w @ricky0123/vad-react
+npm run build -w @semperai/vad-web
+npm run build -w @semperai/vad-react
 ```
 
 ### Running Tests
@@ -78,13 +78,13 @@ npm test
 
 Run tests for a specific package:
 ```bash
-npm test -w @ricky0123/vad-web
-npm test -w @ricky0123/vad-react
+npm test -w @semperai/vad-web
+npm test -w @semperai/vad-react
 ```
 
 Run tests in watch mode:
 ```bash
-npm run test:watch -w @ricky0123/vad-web
+npm run test:watch -w @semperai/vad-web
 ```
 
 ### Test Coverage

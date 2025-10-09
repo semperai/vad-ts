@@ -4,6 +4,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/semperai/vad-ts/coverage.yml?branch=ts&label=tests)](https://github.com/semperai/vad-ts/actions)
 [![Coverage Status](https://coveralls.io/repos/github/semperai/vad-ts/badge.svg?branch=ts)](https://coveralls.io/github/semperai/vad-ts?branch=ts)
+[![npm vad-web](https://img.shields.io/npm/v/@semperai/vad-web?color=blue&label=%40semperai%2Fvad-web)](https://www.npmjs.com/package/@semperai/vad-web)
+[![npm vad-react](https://img.shields.io/npm/v/@semperai/vad-react?color=blue&label=%40semperai%2Fvad-react)](https://www.npmjs.com/package/@semperai/vad-react)
 
 > Run callbacks on segments of audio with user speech in a few lines of code - now with TypeScript!
 
