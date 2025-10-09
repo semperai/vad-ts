@@ -15,7 +15,7 @@
     "lint:fix": "eslint 'packages/**/*.{ts,tsx}' --fix",
     "typecheck": "tsc --noEmit --project packages/web/tsconfig.json && tsc --noEmit --project packages/react/tsconfig.json && tsc --noEmit --project test-site/tsconfig.json && tsc --noEmit --project packages/web/tests/tsconfig.json",
     "build-test-site": "./test-site/build.sh",
-    "serve-test-site": "http-server ./test-site/dist",
+    "serve-test-site": "node ./test-site/server.js",
     "dev": "./scripts/dev.sh",
     "release-all": "npm run release --workspaces --if-present"
   },
