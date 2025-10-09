@@ -10,6 +10,10 @@ tmp
 # dependencies
 node_modules
 
+# Ignore package-lock.json in workspace packages (use root package-lock.json only)
+packages/*/package-lock.json
+examples/*/package-lock.json
+
 # IDEs and editors
 /.idea
 .project
