@@ -1,15 +1,15 @@
 # User guide for use in React projects
 
-1. Install `@ricky0123/vad-react`:
+1. Install `@semperai/vad-react`:
 
     ```shell linenums="1"
-    npm i @ricky0123/vad-react
+    npm i @semperai/vad-react
     ```
 
 2. Use the `useMicVAD` hook to start the voice activity detector:
 
     ```js linenums="1"
-    import { useMicVAD } from "@ricky0123/vad-react"
+    import { useMicVAD } from "@semperai/vad-react"
 
     const MyComponent = () => {
     const vad = useMicVAD({
@@ -26,7 +26,7 @@
     If you need custom audio constraints or stream management, you can override the stream functions:
 
     ```js linenums="1"
-    import { useMicVAD } from "@ricky0123/vad-react"
+    import { useMicVAD } from "@semperai/vad-react"
 
     const MyComponent = () => {
     const vad = useMicVAD({
