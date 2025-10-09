@@ -1,8 +1,9 @@
 # Voice Activity Detection for TypeScript
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/semperai/vad-ts/coverage.yml?branch=ts&label=tests&style=flat-square)](https://github.com/semperai/vad-ts/actions)
-[![npm vad-web](https://img.shields.io/npm/v/@ricky0123/vad-web?color=blue&label=%40ricky0123%2Fvad-web&style=flat-square)](https://www.npmjs.com/package/@ricky0123/vad-web)
-[![npm vad-react](https://img.shields.io/npm/v/@ricky0123/vad-react?color=blue&label=%40ricky0123%2Fvad-react&style=flat-square)](https://www.npmjs.com/package/@ricky0123/vad-react)
+[![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/semperai/vad-ts/coverage.yml?branch=ts&label=tests)](https://github.com/semperai/vad-ts/actions)
+[![Coverage Status](https://coveralls.io/repos/github/semperai/vad-ts/badge.svg?branch=ts)](https://coveralls.io/github/semperai/vad-ts?branch=ts)
 
 > Run callbacks on segments of audio with user speech in a few lines of code - now with TypeScript!
 
@@ -35,7 +36,7 @@ This fork enhances the original [@ricky0123/vad](https://github.com/ricky0123/va
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.27/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@semperai/vad-web@0.0.28/dist/bundle.min.js"></script>
 <script>
   async function main() {
     const myvad = await vad.MicVAD.new({
@@ -47,7 +48,7 @@ This fork enhances the original [@ricky0123/vad](https://github.com/ricky0123/va
         console.log("Speech ended", audio)
       },
       onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/",
-      baseAssetPath: "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.27/dist/",
+      baseAssetPath: "https://cdn.jsdelivr.net/npm/@semperai/vad-web@0.0.28/dist/",
     })
     myvad.start()
   }
@@ -58,7 +59,7 @@ This fork enhances the original [@ricky0123/vad](https://github.com/ricky0123/va
 ### React
 
 ```tsx
-import { useMicVAD } from "@ricky0123/vad-react"
+import { useMicVAD } from "@semperai/vad-react"
 
 function MyComponent() {
   const { listening, loading, userSpeaking, start, pause, toggle } = useMicVAD({
@@ -84,7 +85,7 @@ function MyComponent() {
 ### TypeScript (NPM)
 
 ```typescript
-import { MicVAD } from "@ricky0123/vad-web"
+import { MicVAD } from "@semperai/vad-web"
 
 async function setupVAD() {
   const vad = await MicVAD.new({
@@ -106,10 +107,10 @@ async function setupVAD() {
 
 ```bash
 # Web package
-npm install @ricky0123/vad-web
+npm install @semperai/vad-web
 
 # React package
-npm install @ricky0123/vad-react
+npm install @semperai/vad-react
 
 # Development
 git clone https://github.com/semperai/vad-ts
@@ -121,7 +122,7 @@ npm test
 
 ## Package Overview
 
-### @ricky0123/vad-web
+### @semperai/vad-web
 
 Core VAD implementation for browsers:
 
@@ -137,7 +138,7 @@ Core VAD implementation for browsers:
 - Configurable logging system (`configureLogging`, `LogConfig`)
 - Performance tracking (`VADPerformanceTracker`, `PerformanceTimer`)
 
-### @ricky0123/vad-react
+### @semperai/vad-react
 
 React hooks for easy integration:
 
@@ -150,6 +151,7 @@ React hooks for easy integration:
 - Callback refs for stable function references
 - `userSpeaking` state based on configurable threshold
 - Loading, error, and listening states
+- Re-exports all `utils` from `@semperai/vad-web`
 
 ## Development
 
