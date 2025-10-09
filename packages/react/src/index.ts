@@ -1,12 +1,12 @@
-import type { RealTimeVADOptions } from "@ricky0123/vad-web"
+import type { RealTimeVADOptions } from "@semperai/vad-web"
 import {
   DEFAULT_MODEL,
   MicVAD,
   getDefaultRealTimeVADOptions,
-} from "@ricky0123/vad-web"
+} from "@semperai/vad-web"
 import { useEffect, useState, useRef, useCallback } from "react"
 
-export { utils } from "@ricky0123/vad-web"
+export { utils } from "@semperai/vad-web"
 
 interface ReactOptions {
   userSpeakingThreshold: number
