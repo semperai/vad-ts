@@ -61,3 +61,6 @@ Documentation for bundling the voice activity detector for the browser or using 
 Silero Team. (2021).
 Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier.
 GitHub, GitHub repository, https://github.com/snakers4/silero-vad, hello@silero.ai.
+
+
+<!-- Security scan triggered at 2026-08-31 16:49:00 -->
