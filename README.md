@@ -64,3 +64,5 @@ GitHub, GitHub repository, https://github.com/snakers4/silero-vad, hello@silero.
 
 
 <!-- Security scan triggered at 2026-08-31 16:49:00 -->
+
+<!-- Security scan triggered at 2026-08-31 16:39:58 -->
