@@ -11,12 +11,16 @@ mkdir -p test-site/dist/subpath
 
 (
     cd test-site/src
-    find . -name "*.html" -exec cp --parents {} ../dist \;
+    find . -name "*.html" | while read -r file; do
+        mkdir -p "../dist/$(dirname "$file")"
+        cp "$file" "../dist/$file"
+    done
 )
 
 cp test-site/src/*.html test-site/dist
 cp \
     node_modules/@ricky0123/vad-web/dist/*.onnx \
+    node_modules/@ricky0123/vad-web/dist/bundle.min.js \
     node_modules/@ricky0123/vad-web/dist/vad.worklet.bundle.min.js \
     node_modules/onnxruntime-web/dist/*.wasm \
     node_modules/onnxruntime-web/dist/*.mjs \
@@ -24,6 +28,7 @@ cp \
 
 cp \
     node_modules/@ricky0123/vad-web/dist/*.onnx \
+    node_modules/@ricky0123/vad-web/dist/bundle.min.js \
     node_modules/@ricky0123/vad-web/dist/vad.worklet.bundle.min.js \
     node_modules/onnxruntime-web/dist/*.wasm \
     node_modules/onnxruntime-web/dist/*.mjs \

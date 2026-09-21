@@ -1,4 +1,4 @@
-import { NonRealTimeVAD, utils } from "@ricky0123/vad-web"
+import { NonRealTimeVAD, utils } from "@semperai/vad-web"
 import React, { useRef, useState } from "react"
 
 interface AudioSegment {
