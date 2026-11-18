@@ -1,10 +1,10 @@
-import type { ReactRealTimeVADOptions } from "@ricky0123/vad-react"
+import type { ReactRealTimeVADOptions } from "@semperai/vad-react"
 import {
   getDefaultReactRealTimeVADOptions,
   useMicVAD,
   utils,
-} from "@ricky0123/vad-react"
-import { SpeechProbabilities } from "@ricky0123/vad-web/dist/models/common"
+} from "@semperai/vad-react"
+import { SpeechProbabilities } from "@semperai/vad-web/dist/models/common"
 import React, { useEffect, useState } from "react"
 import { createRoot } from "react-dom/client"
 import NonRealTimeTest from "./non-real-time-test"
@@ -262,7 +262,7 @@ const assetPathsConfig: Record<
   },
   cdn: {
     baseAssetPath:
-      "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@latest/dist/",
+      "https://cdn.jsdelivr.net/npm/@semperai/vad-web@latest/dist/",
     onnxWASMBasePath:
       "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/",
   },

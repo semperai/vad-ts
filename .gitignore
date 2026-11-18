@@ -10,6 +10,10 @@ tmp
 # dependencies
 node_modules
 
+# Ignore package-lock.json in workspace packages (use root package-lock.json only)
+packages/*/package-lock.json
+examples/*/package-lock.json
+
 # IDEs and editors
 /.idea
 .project
@@ -26,11 +30,16 @@ node_modules
 /.sass-cache
 /connect.lock
 /coverage
+coverage/
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
 /typings
+
+# Test results and reports
+playwright-report/
+test-results/
 
 # System Files
 .DS_Store

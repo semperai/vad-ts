@@ -8,12 +8,12 @@ The `MicVAD` API is for recording user audio in the browser and running callback
 ### Support
 | Package                | Type       | Supported                                      | Description |
 | ---------------------- | ---------- | ---------------------------------------------- | ----------- |
-| `@ricky0123/vad-web`   | `package`  | Yes                                            |             |
-| `@ricky0123/vad-react` | `package`  | No, use the [useMicVAD](api.md#usemicvad) hook |             |
+| `@semperai/vad-web`   | `package`  | Yes                                            |             |
+| `@semperai/vad-react` | `package`  | No, use the [useMicVAD](api.md#usemicvad) hook |             |
 
 ### Example
 ```js linenums="1"
-import { MicVAD } from "@ricky0123/vad-web"
+import { MicVAD } from "@semperai/vad-web"
 const myvad = await MicVAD.new({
     onSpeechEnd: (audio) => {
         // do something with `audio` (Float32Array of audio samples at sample rate 16000)...
@@ -61,12 +61,12 @@ The `NonRealTimeVAD` API is for identifying segments of user speech if you alrea
 ### Support
 | Package                | Type       | Supported | Description |
 | ---------------------- | ---------- | --------- | ----------- |
-| `@ricky0123/vad-web`   | `package`  | Yes       |             |
-| `@ricky0123/vad-react` | `package`  | No        |             |
+| `@semperai/vad-web`   | `package`  | Yes       |             |
+| `@semperai/vad-react` | `package`  | No        |             |
 
 ### Example
 ```js linenums="1"
-const vad = require("@ricky0123/vad-node") // or @ricky0123/vad-web
+const vad = require("@ricky0123/vad-node") // or @semperai/vad-web
 
 const options: Partial<vad.NonRealTimeVADOptions> = { /* ... */ }
 const myvad = await vad.NonRealTimeVAD.new(options)
@@ -103,12 +103,12 @@ A React hook wrapper for [MicVAD](api.md#micvad). Use this if you want to run th
 ### Support
 | Package                | Type       | Supported                       | Description |
 | ---------------------- | ---------- | ------------------------------- | ----------- |
-| `@ricky0123/vad-web`   | `package`  | No, use [MicVAD](api.md#micvad) |             |
-| `@ricky0123/vad-react` | `package`  | Yes                             |             |
+| `@semperai/vad-web`   | `package`  | No, use [MicVAD](api.md#micvad) |             |
+| `@semperai/vad-react` | `package`  | Yes                             |             |
 
 ### Example
 ```js linenums="1"
-import { useMicVAD } from "@ricky0123/vad-react"
+import { useMicVAD } from "@semperai/vad-react"
 
 const MyComponent = () => {
   const vad = useMicVAD({

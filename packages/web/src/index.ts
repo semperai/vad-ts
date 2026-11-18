@@ -19,10 +19,29 @@ export const utils = {
   encodeWAV,
 }
 
+export { configureLogging, getLoggingConfig, type LogConfig } from "./logging"
+export type { SpeechProbabilities } from "./models/common"
+export {
+  PerformanceTimer,
+  VADPerformanceTracker,
+  type VADPerformanceMetrics,
+} from "./performance"
 export {
   AudioNodeVAD,
   DEFAULT_MODEL,
   MicVAD,
   getDefaultRealTimeVADOptions,
+  ort,
 } from "./real-time-vad"
 export type { RealTimeVADOptions } from "./real-time-vad"
+export {
+  AudioConstraintsError,
+  AudioContextError,
+  ModelLoadError,
+  VADError,
+  WorkletLoadError,
+  checkBrowserCompatibility,
+  checkUserMediaSupport,
+  validateAudioConstraints,
+  type BrowserCompatibility,
+} from "./validation"

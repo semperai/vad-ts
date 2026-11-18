@@ -1,4 +1,4 @@
-import { useMicVAD, utils } from "@ricky0123/vad-react"
+import { useMicVAD, utils } from "@semperai/vad-react"
 import React, { useState } from "react"
 import ReactDOM from "react-dom"
 
@@ -23,7 +23,7 @@ function App() {
   })
   return (
     <div>
-      <h1>Demo of @ricky0123/vad-react</h1>
+      <h1>Demo of @semperai/vad-react</h1>
       <button onClick={vad.toggle}>Toggle VAD</button>
       {vad.listening && <div>VAD is running</div>}
       {!vad.listening && <div>VAD is NOT running</div>}

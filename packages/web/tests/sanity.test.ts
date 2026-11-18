@@ -120,7 +120,7 @@ describe("VAD Web Package Sanity Tests", () => {
 
   describe("Model Loading", () => {
     test("should handle fetch for model loading", async () => {
-      const mockFetch = global.fetch as jest.Mock
+      const mockFetch = global.fetch as any
       mockFetch.mockResolvedValueOnce({
         ok: true,
         arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),

@@ -18,7 +18,7 @@ class MockInferenceSession {
 const mockOrt = {
   Tensor: MockTensor,
   InferenceSession: {
-    create: jest.fn(() => Promise.resolve(new MockInferenceSession())),
+    create: vi.fn(() => Promise.resolve(new MockInferenceSession())),
   },
   env: {
     wasm: {
@@ -28,7 +28,7 @@ const mockOrt = {
 }
 
 // Mock the onnxruntime-web module
-jest.mock("onnxruntime-web", () => mockOrt)
+vi.mock("onnxruntime-web", () => mockOrt)
 
 // Mock Web Audio API
 class MockAudioContext {
@@ -36,77 +36,77 @@ class MockAudioContext {
   sampleRate = 16000
   currentTime = 0
   destination = {
-    connect: jest.fn(),
-    disconnect: jest.fn(),
+    connect: vi.fn(),
+    disconnect: vi.fn(),
   }
 
   // Add audioWorklet mock
   audioWorklet = {
-    addModule: jest.fn(() => Promise.resolve()),
+    addModule: vi.fn(() => Promise.resolve()),
   }
 
-  createMediaStreamSource = jest.fn(() => ({
-    connect: jest.fn(),
-    disconnect: jest.fn(),
+  createMediaStreamSource = vi.fn(() => ({
+    connect: vi.fn(),
+    disconnect: vi.fn(),
   }))
 
-  createScriptProcessor = jest.fn(() => ({
-    connect: jest.fn(),
-    disconnect: jest.fn(),
+  createScriptProcessor = vi.fn(() => ({
+    connect: vi.fn(),
+    disconnect: vi.fn(),
     onaudioprocess: null,
   }))
 
-  createAnalyser = jest.fn(() => ({
-    connect: jest.fn(),
-    disconnect: jest.fn(),
+  createAnalyser = vi.fn(() => ({
+    connect: vi.fn(),
+    disconnect: vi.fn(),
     frequencyBinCount: 1024,
-    getFloatFrequencyData: jest.fn(),
-    getFloatTimeDomainData: jest.fn(),
+    getFloatFrequencyData: vi.fn(),
+    getFloatTimeDomainData: vi.fn(),
   }))
 
-  createGain = jest.fn(() => ({
-    connect: jest.fn(),
-    disconnect: jest.fn(),
+  createGain = vi.fn(() => ({
+    connect: vi.fn(),
+    disconnect: vi.fn(),
     gain: { value: 1 },
   }))
 
-  createOscillator = jest.fn(() => ({
-    connect: jest.fn(),
-    disconnect: jest.fn(),
-    start: jest.fn(),
-    stop: jest.fn(),
+  createOscillator = vi.fn(() => ({
+    connect: vi.fn(),
+    disconnect: vi.fn(),
+    start: vi.fn(),
+    stop: vi.fn(),
     frequency: { value: 440 },
   }))
 
-  createBuffer = jest.fn(
+  createBuffer = vi.fn(
     (channels: number, length: number, sampleRate: number) => ({
       numberOfChannels: channels,
       length,
       sampleRate,
-      getChannelData: jest.fn(() => new Float32Array(length)),
+      getChannelData: vi.fn(() => new Float32Array(length)),
     })
   )
 
-  createBufferSource = jest.fn(() => ({
-    connect: jest.fn(),
-    disconnect: jest.fn(),
-    start: jest.fn(),
-    stop: jest.fn(),
+  createBufferSource = vi.fn(() => ({
+    connect: vi.fn(),
+    disconnect: vi.fn(),
+    start: vi.fn(),
+    stop: vi.fn(),
     buffer: null,
   }))
 
-  resume = jest.fn(() => Promise.resolve())
-  suspend = jest.fn(() => Promise.resolve())
-  close = jest.fn(() => Promise.resolve())
+  resume = vi.fn(() => Promise.resolve())
+  suspend = vi.fn(() => Promise.resolve())
+  close = vi.fn(() => Promise.resolve())
 }
 
 class MockAudioWorkletNode {
   port = {
-    postMessage: jest.fn(),
+    postMessage: vi.fn(),
     onmessage: null,
   }
-  connect = jest.fn()
-  disconnect = jest.fn()
+  connect = vi.fn()
+  disconnect = vi.fn()
   onprocessorerror = null
 
   constructor(_context: any, _name: string, _options?: any) {
@@ -116,8 +116,8 @@ class MockAudioWorkletNode {
 
 // Add MediaStreamAudioSourceNode mock
 class MockMediaStreamAudioSourceNode {
-  connect = jest.fn()
-  disconnect = jest.fn()
+  connect = vi.fn()
+  disconnect = vi.fn()
   mediaStream: MediaStream
 
   constructor(_context: any, options: { mediaStream: MediaStream }) {
@@ -126,24 +126,24 @@ class MockMediaStreamAudioSourceNode {
 }
 
 class MockMediaDevices {
-  getUserMedia = jest.fn(() =>
+  getUserMedia = vi.fn(() =>
     Promise.resolve({
-      getTracks: jest.fn(() => []),
-      getAudioTracks: jest.fn(() => []),
-      getVideoTracks: jest.fn(() => []),
-      addTrack: jest.fn(),
-      removeTrack: jest.fn(),
+      getTracks: vi.fn(() => []),
+      getAudioTracks: vi.fn(() => []),
+      getVideoTracks: vi.fn(() => []),
+      addTrack: vi.fn(),
+      removeTrack: vi.fn(),
       active: true, // Add active property for stream state checking
     })
   )
 }
 
 class MockMediaStream {
-  getTracks = jest.fn(() => [])
-  getAudioTracks = jest.fn(() => [])
-  getVideoTracks = jest.fn(() => [])
-  addTrack = jest.fn()
-  removeTrack = jest.fn()
+  getTracks = vi.fn(() => [])
+  getAudioTracks = vi.fn(() => [])
+  getVideoTracks = vi.fn(() => [])
+  addTrack = vi.fn()
+  removeTrack = vi.fn()
   active = true // Add active property for stream state checking
 }
 
@@ -187,24 +187,42 @@ Object.defineProperty(global, "MediaStream", {
 // Mock URL.createObjectURL
 Object.defineProperty(global, "URL", {
   value: {
-    createObjectURL: jest.fn(() => "blob:mock-url"),
-    revokeObjectURL: jest.fn(),
+    createObjectURL: vi.fn(() => "blob:mock-url"),
+    revokeObjectURL: vi.fn(),
   },
   writable: true,
 })
 
 // Mock fetch for model loading
-global.fetch = jest.fn(() =>
+global.fetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
     arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)),
   })
-) as jest.Mock
+) as any
 
 // Mock console methods to reduce noise in tests
 global.console = {
   ...console,
-  log: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
+  log: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
 }
+
+// Mock window.location for URL validation
+Object.defineProperty(global, "window", {
+  value: {
+    location: {
+      origin: "http://localhost",
+      href: "http://localhost/",
+      protocol: "http:",
+      host: "localhost",
+      hostname: "localhost",
+      port: "",
+      pathname: "/",
+      search: "",
+      hash: "",
+    },
+  },
+  writable: true,
+})

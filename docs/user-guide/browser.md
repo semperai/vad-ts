@@ -1,12 +1,12 @@
 # User guide for browser use
 
-The `@ricky0123/vad-web` package aims to provide an accurate, user-friendly voice activity detector (VAD) that runs in the browser.
+The `@semperai/vad-web` package aims to provide an accurate, user-friendly voice activity detector (VAD) that runs in the browser.
 
 ## Script tags quick start
 The VAD can be used via script tags as follows:
 ```html linenums="1"
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.27/dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@semperai/vad-web@0.0.27/dist/bundle.min.js"></script>
 <script>
   async function main() {
     const myvad = await vad.MicVAD.new({
@@ -14,7 +14,7 @@ The VAD can be used via script tags as follows:
         // do something with `audio` (Float32Array of audio samples at sample rate 16000)...
       },
       onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/",
-      baseAssetPath: "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.27/dist/",
+      baseAssetPath: "https://cdn.jsdelivr.net/npm/@semperai/vad-web@0.0.27/dist/",
     })
     myvad.start()
   }
@@ -24,9 +24,9 @@ The VAD can be used via script tags as follows:
 
 ## NPM
 
-If you are managing your dependencies with NPM, install @ricky0123/vad-web with a command like
+If you are managing your dependencies with NPM, install @semperai/vad-web with a command like
 ```bash linenums="1"
-npm i @ricky0123/vad-web
+npm i @semperai/vad-web
 ```
 
 ## Bundling
@@ -36,7 +36,7 @@ Bundling your project should not require any special configuration, because the 
 However, if you want to serve the onnx, wasm, and worklet files yourself, you can do the following. First, use the `baseAssetPath` and `onnxWASMBasePath` options to control where the files are to be loaded from:
 
 ```js linenums="1"
-import { MicVAD } from "@ricky0123/vad-web"
+import { MicVAD } from "@semperai/vad-web"
 const myvad = await MicVAD.new({
   baseAssetPath: "/", // or whatever you want
   onnxWASMBasePath: "/", // or whatever you want
@@ -49,8 +49,8 @@ myvad.start()
 
 Then, make sure these files are available under the paths you specified:
 
-1. serve the `silero_vad_legacy.onnx` and `silero_vad_v5.onnx` files that come distributed with `@ricky0123/vad-web` (under `baseAssetPath`)
-2. serve the `vad.worklet.bundle.min.js` file that comes distributed with `@ricky0123/vad-web` (under `baseAssetPath`)
+1. serve the `silero_vad_legacy.onnx` and `silero_vad_v5.onnx` files that come distributed with `@semperai/vad-web` (under `baseAssetPath`)
+2. serve the `vad.worklet.bundle.min.js` file that comes distributed with `@semperai/vad-web` (under `baseAssetPath`)
 3. serve the wasm files that come distributed with the package `onnxruntime-web` (under `onnxWASMBasePath`)
 4. **Important for newer versions of onnxruntime-web**: Also serve the `.mjs` files that come distributed with `onnxruntime-web` (under `onnxWASMBasePath`). These JavaScript bindings are required for proper initialization of the WebAssembly modules.
 
@@ -66,11 +66,11 @@ module.exports = {
       patterns: [
         // ...
         {
-          from: "node_modules/@ricky0123/vad-web/dist/vad.worklet.bundle.min.js",
+          from: "node_modules/@semperai/vad-web/dist/vad.worklet.bundle.min.js",
           to: "[name][ext]",
         },
         {
-          from: "node_modules/@ricky0123/vad-web/dist/*.onnx",
+          from: "node_modules/@semperai/vad-web/dist/*.onnx",
           to: "[name][ext]",
         },
         { from: "node_modules/onnxruntime-web/dist/*.wasm", to: "[name][ext]" },
@@ -90,15 +90,15 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'node_modules/@ricky0123/vad-web/dist/vad.worklet.bundle.min.js',
+          src: 'node_modules/@semperai/vad-web/dist/vad.worklet.bundle.min.js',
           dest: './'
         },
         {
-          src: 'node_modules/@ricky0123/vad-web/dist/silero_vad_v5.onnx',
+          src: 'node_modules/@semperai/vad-web/dist/silero_vad_v5.onnx',
           dest: './'
         },
         {
-          src: 'node_modules/@ricky0123/vad-web/dist/silero_vad_legacy.onnx',
+          src: 'node_modules/@semperai/vad-web/dist/silero_vad_legacy.onnx',
           dest: './'
         },
         {
@@ -142,7 +142,7 @@ If you need custom audio constraints or want to provide your own stream, you can
 To use custom audio constraints, override the `getStream` function:
 
 ```js linenums="1"
-import { MicVAD } from "@ricky0123/vad-web"
+import { MicVAD } from "@semperai/vad-web"
 
 const myvad = await MicVAD.new({
   getStream: async () => {
@@ -164,4 +164,4 @@ myvad.start()
 ```
 
 ## API
-`@ricky0123/vad-web` supports the [MicVAD](api.md#micvad) and [NonRealTimeVAD](api.md#nonrealtimevad) APIs.
+`@semperai/vad-web` supports the [MicVAD](api.md#micvad) and [NonRealTimeVAD](api.md#nonrealtimevad) APIs.
